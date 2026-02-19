@@ -1233,7 +1233,7 @@ app.get("/:page", (req, res, next) => {
   return res.sendFile(path.join(ROOT_DIR, `${page}.html`));
 });
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
   if (req.path.startsWith("/api/")) {
     return res.status(404).json({ error: "Endpoint not found." });
   }
