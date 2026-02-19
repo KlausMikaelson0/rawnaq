@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="لوحة تحكم رونق لإدارة بيانات المتجر والمنتجات بسهولة بدون خبرة تقنية."
+    />
+    <title>لوحة التحكم | رونق</title>
+    <link rel="icon" href="assets/brand/logo-icon.svg" type="image/svg+xml" />
+    <script src="assets/js/language-init.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script src="assets/js/config.js" defer></script>
+    <script src="assets/js/i18n.js" defer></script>
+    <script src="assets/js/products-data.js" defer></script>
+    <script src="assets/js/store-state.js" defer></script>
+    <script src="assets/js/site.js" defer></script>
+    <script src="assets/js/admin.js" defer></script>
+  </head>
+  <body
+    data-page="admin"
+    data-title-template="لوحة التحكم | {store}"
+    data-description-template="لوحة تحكم {store} لإدارة بيانات المتجر والمنتجات بسهولة بدون خبرة تقنية."
+  >
+    <div id="site-header"></div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="section-title">لوحة التحكم المبسطة</h1>
+          <p class="section-subtitle">
+            واجهة إدارة سهلة للمبتدئين: تعديل بيانات المتجر، تعديل المنتجات، وتصدير/استيراد نسخة
+            احتياطية لنقل الملكية بالكامل.
+          </p>
+
+          <div class="admin-layout">
+            <section class="admin-panel">
+              <h2>إعدادات المتجر</h2>
+              <div class="admin-grid">
+                <div class="dual-inputs">
+                  <label>
+                    اسم المتجر (AR)
+                    <input id="storeNameAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Store Name (EN)
+                    <input id="storeNameEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    الشعار النصي (AR)
+                    <input id="taglineAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Tagline (EN)
+                    <input id="taglineEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    العملة (AR)
+                    <input id="currencyAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Currency (EN)
+                    <input id="currencyEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <label>
+                  البريد الإلكتروني
+                  <input id="contactEmail" class="input" type="email" />
+                </label>
+                <label>
+                  الهاتف
+                  <input id="contactPhone" class="input" type="text" />
+                </label>
+                <label>
+                  رابط واتساب
+                  <input id="contactWhatsapp" class="input" type="url" />
+                </label>
+
+                <div class="dual-inputs">
+                  <label>
+                    الموقع (AR)
+                    <input id="locationAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Location (EN)
+                    <input id="locationEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    رسالة الشحن (AR)
+                    <input id="shippingAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Shipping Message (EN)
+                    <input id="shippingEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    رسالة الدفع (AR)
+                    <input id="paymentAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Payment Message (EN)
+                    <input id="paymentEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    رسالة الجودة (AR)
+                    <input id="qualityAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Quality Message (EN)
+                    <input id="qualityEn" class="input" type="text" />
+                  </label>
+                </div>
+              </div>
+
+              <div class="admin-actions">
+                <button id="saveSettingsBtn" class="btn btn-gold" type="button">
+                  حفظ الإعدادات
+                </button>
+                <button id="resetSettingsBtn" class="btn btn-outline" type="button">
+                  إعادة الافتراضي
+                </button>
+                <button id="exportBackupBtn" class="btn btn-outline" type="button">
+                  تصدير نسخة احتياطية
+                </button>
+                <label class="btn btn-outline" for="importBackupInput">استيراد نسخة</label>
+                <input id="importBackupInput" type="file" accept="application/json" hidden />
+              </div>
+              <p id="adminSettingsStatus" class="form-status"></p>
+            </section>
+
+            <section class="admin-panel">
+              <h2>محرر المنتجات</h2>
+              <p class="muted">
+                ابحث عن المنتج عبر SKU أو الاسم، ثم عدّل البيانات واضغط "حفظ المنتج".
+              </p>
+
+              <div class="admin-grid">
+                <label>
+                  بحث سريع
+                  <input id="productSearch" class="input" type="search" placeholder="SKU أو الاسم" />
+                </label>
+                <label>
+                  اختر المنتج
+                  <select id="productSelect" class="select"></select>
+                </label>
+
+                <label>
+                  SKU
+                  <input id="productSku" class="input" type="text" readonly />
+                </label>
+
+                <div class="dual-inputs">
+                  <label>
+                    الاسم (AR)
+                    <input id="productNameAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Name (EN)
+                    <input id="productNameEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    التصنيف (AR)
+                    <input id="productCategoryAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Category (EN)
+                    <input id="productCategoryEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    شارة المنتج (AR)
+                    <input id="productBadgeAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Product Badge (EN)
+                    <input id="productBadgeEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    التركيز (AR)
+                    <input id="productConcentrationAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Concentration (EN)
+                    <input id="productConcentrationEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    الوصف التسويقي (AR)
+                    <textarea id="productDescriptionAr" rows="6"></textarea>
+                  </label>
+                  <label>
+                    Description (EN)
+                    <textarea id="productDescriptionEn" rows="6"></textarea>
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    الحجم (مل)
+                    <input id="productVolumeMl" class="input" type="number" min="1" />
+                  </label>
+                  <label>
+                    السعر الأصلي
+                    <input id="productOriginalPrice" class="input" type="number" min="1" />
+                  </label>
+                </div>
+
+                <label>
+                  السعر المخفض
+                  <input id="productSalePrice" class="input" type="number" min="1" />
+                </label>
+              </div>
+
+              <div class="admin-actions">
+                <button id="saveProductBtn" class="btn btn-gold" type="button">
+                  حفظ المنتج
+                </button>
+                <button id="resetProductsBtn" class="btn btn-outline" type="button">
+                  استعادة جميع المنتجات الافتراضية
+                </button>
+              </div>
+              <p id="adminProductsStatus" class="form-status"></p>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

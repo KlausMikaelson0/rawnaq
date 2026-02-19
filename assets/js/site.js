@@ -1,47 +1,79 @@
 "use strict";
 
 (function initSite() {
-  const config = window.STORE_CONFIG || {
-    name: "رونق",
-    tagline: "عطور فاخرة بصياغة خليجية",
-    currency: "ريال",
-    contact: { email: "", phone: "", whatsapp: "#", location: "" },
-    business: { shippingNote: "", paymentNote: "", qualityNote: "" }
-  };
-
+  const i18n = window.I18N;
+  const lang = i18n ? i18n.getCurrentLanguage() : "ar";
+  const config = window.StoreState
+    ? window.StoreState.getConfig()
+    : window.DEFAULT_STORE_CONFIG || {};
   const page = document.body?.dataset?.page || "";
 
+  function localize(value, targetLang) {
+    if (i18n && typeof i18n.localize === "function") {
+      return i18n.localize(value, targetLang || lang);
+    }
+    if (value && typeof value === "object") {
+      return value.ar || value.en || "";
+    }
+    return String(value || "");
+  }
+
+  function t(keyPath, variables) {
+    if (i18n && typeof i18n.t === "function") {
+      return i18n.t(keyPath, variables, lang);
+    }
+    return "";
+  }
+
+  function getAssetPrefix() {
+    if (i18n && typeof i18n.isEnglishPath === "function" && i18n.isEnglishPath()) {
+      return "../assets";
+    }
+    return "assets";
+  }
+
+  function getTargetLanguage() {
+    return lang === "ar" ? "en" : "ar";
+  }
+
   function applyBrandText() {
+    const storeName = localize(config.name);
+    const tagline = localize(config.tagline);
+    const location = localize(config.contact?.location);
+    const shippingNote = localize(config.business?.shippingNote);
+    const paymentNote = localize(config.business?.paymentNote);
+    const qualityNote = localize(config.business?.qualityNote);
+
     document.querySelectorAll("[data-store-name]").forEach((el) => {
-      el.textContent = config.name;
+      el.textContent = storeName;
     });
     document.querySelectorAll("[data-store-tagline]").forEach((el) => {
-      el.textContent = config.tagline;
+      el.textContent = tagline;
     });
     document.querySelectorAll("[data-store-email]").forEach((el) => {
-      el.textContent = config.contact.email;
+      el.textContent = config.contact?.email || "";
     });
     document.querySelectorAll("[data-store-phone]").forEach((el) => {
-      el.textContent = config.contact.phone;
+      el.textContent = config.contact?.phone || "";
     });
     document.querySelectorAll("[data-store-location]").forEach((el) => {
-      el.textContent = config.contact.location;
+      el.textContent = location;
     });
     document.querySelectorAll("[data-store-whatsapp]").forEach((el) => {
       if (el.tagName.toLowerCase() === "a") {
-        el.setAttribute("href", config.contact.whatsapp);
+        el.setAttribute("href", config.contact?.whatsapp || "#");
       } else {
-        el.textContent = config.contact.whatsapp;
+        el.textContent = config.contact?.whatsapp || "";
       }
     });
     document.querySelectorAll("[data-store-shipping-note]").forEach((el) => {
-      el.textContent = config.business.shippingNote;
+      el.textContent = shippingNote;
     });
     document.querySelectorAll("[data-store-payment-note]").forEach((el) => {
-      el.textContent = config.business.paymentNote;
+      el.textContent = paymentNote;
     });
     document.querySelectorAll("[data-store-quality-note]").forEach((el) => {
-      el.textContent = config.business.qualityNote;
+      el.textContent = qualityNote;
     });
     document.querySelectorAll("[data-current-year]").forEach((el) => {
       el.textContent = String(new Date().getFullYear());
@@ -49,9 +81,10 @@
   }
 
   function applyMetaBranding() {
+    const storeName = localize(config.name);
     const titleTemplate = document.body?.dataset?.titleTemplate;
     if (titleTemplate) {
-      document.title = titleTemplate.replaceAll("{store}", config.name);
+      document.title = titleTemplate.replaceAll("{store}", storeName);
     }
 
     const descriptionTemplate = document.body?.dataset?.descriptionTemplate;
@@ -60,7 +93,7 @@
       if (descriptionMeta) {
         descriptionMeta.setAttribute(
           "content",
-          descriptionTemplate.replaceAll("{store}", config.name)
+          descriptionTemplate.replaceAll("{store}", storeName)
         );
       }
     }
@@ -71,6 +104,13 @@
   }
 
   function renderHeaderFooter() {
+    const storeName = localize(config.name);
+    const storeTagline = localize(config.tagline);
+    const targetLanguage = getTargetLanguage();
+    const languageHref = i18n
+      ? i18n.getLanguageSwitchHref(targetLanguage)
+      : "#";
+    const assetPrefix = getAssetPrefix();
     const headerRoot = document.getElementById("site-header");
     const footerRoot = document.getElementById("site-footer");
 
@@ -78,21 +118,27 @@
       headerRoot.innerHTML = `
         <header class="site-header">
           <div class="container header-inner">
-            <a class="brand" href="index.html" aria-label="العودة إلى الرئيسية">
-              <img src="assets/brand/logo-icon.svg" alt="شعار ${config.name}" class="brand-logo" />
+            <a class="brand" href="index.html" aria-label="${t("header.homeAria")}">
+              <img src="${assetPrefix}/brand/logo-icon.svg" alt="${storeName} logo" class="brand-logo" />
               <div class="brand-text">
-                <strong data-store-name>${config.name}</strong>
-                <span data-store-tagline>${config.tagline}</span>
+                <strong data-store-name>${storeName}</strong>
+                <span data-store-tagline>${storeTagline}</span>
               </div>
             </a>
-            <button id="mobileMenuToggle" class="mobile-toggle" aria-label="فتح القائمة">☰</button>
-            <nav id="mainNav" class="main-nav" aria-label="القائمة الرئيسية">
-              <a class="${navLinkClass("home")}" href="index.html">الرئيسية</a>
-              <a class="${navLinkClass("products")}" href="products.html">المنتجات</a>
-              <a class="${navLinkClass("about")}" href="about.html">من نحن</a>
-              <a class="${navLinkClass("contact")}" href="contact.html">تواصل معنا</a>
+            <button id="mobileMenuToggle" class="mobile-toggle" aria-label="${t("header.menuAria")}">☰</button>
+            <nav id="mainNav" class="main-nav" aria-label="${t("header.menuAria")}">
+              <a class="${navLinkClass("home")}" href="index.html">${t("nav.home")}</a>
+              <a class="${navLinkClass("products")}" href="products.html">${t("nav.products")}</a>
+              <a class="${navLinkClass("about")}" href="about.html">${t("nav.about")}</a>
+              <a class="${navLinkClass("contact")}" href="contact.html">${t("nav.contact")}</a>
+              <a class="${navLinkClass("checkout")}" href="checkout.html">${t("nav.checkout")}</a>
             </nav>
-            <a class="btn btn-gold header-cta" href="products.html">تسوق الآن</a>
+            <div class="header-actions">
+              <a id="languageSwitch" class="btn btn-outline lang-toggle" href="${languageHref}" data-lang-target="${targetLanguage}">
+                ${t("header.switchLanguage")}
+              </a>
+              <a class="btn btn-gold header-cta" href="products.html">${t("header.shopNow")}</a>
+            </div>
           </div>
         </header>
       `;
@@ -103,33 +149,34 @@
         <footer class="site-footer">
           <div class="container footer-grid">
             <section>
-              <h3>عن <span data-store-name>${config.name}</span></h3>
+              <h3>${t("footer.aboutTitle", { store: storeName })}</h3>
               <p>
-                متجر عطور فاخر جاهز للتشغيل الفوري في السوق الخليجي، بتجربة شراء راقية وهوية
-                بصرية احترافية قابلة لنقل الملكية بالكامل.
+                ${t("footer.aboutText")}
               </p>
             </section>
             <section>
-              <h3>روابط مهمة</h3>
+              <h3>${t("footer.linksTitle")}</h3>
               <ul class="footer-links">
-                <li><a href="privacy.html">سياسة الخصوصية</a></li>
-                <li><a href="terms.html">الشروط والأحكام</a></li>
-                <li><a href="returns.html">سياسة الاسترجاع</a></li>
-                <li><a href="contact.html">تواصل معنا</a></li>
+                <li><a href="privacy.html">${t("footer.privacy")}</a></li>
+                <li><a href="terms.html">${t("footer.terms")}</a></li>
+                <li><a href="returns.html">${t("footer.returns")}</a></li>
+                <li><a href="contact.html">${t("footer.contact")}</a></li>
+                <li><a href="checkout.html">${t("footer.checkout")}</a></li>
+                <li><a href="admin.html">${t("footer.admin")}</a></li>
               </ul>
             </section>
             <section>
-              <h3>بيانات التواصل</h3>
+              <h3>${t("footer.contactTitle")}</h3>
               <ul class="footer-contact">
-                <li><strong>البريد:</strong> <span data-store-email>${config.contact.email}</span></li>
-                <li><strong>الهاتف:</strong> <span data-store-phone>${config.contact.phone}</span></li>
-                <li><strong>المدينة:</strong> <span data-store-location>${config.contact.location}</span></li>
-                <li><a class="footer-whatsapp" data-store-whatsapp href="${config.contact.whatsapp}">واتساب مباشر</a></li>
+                <li><strong>${t("footer.email")}:</strong> <span data-store-email>${config.contact?.email || ""}</span></li>
+                <li><strong>${t("footer.phone")}:</strong> <span data-store-phone>${config.contact?.phone || ""}</span></li>
+                <li><strong>${t("footer.city")}:</strong> <span data-store-location>${localize(config.contact?.location)}</span></li>
+                <li><a class="footer-whatsapp" data-store-whatsapp href="${config.contact?.whatsapp || "#"}">${t("footer.whatsapp")}</a></li>
               </ul>
             </section>
           </div>
           <div class="container footer-bottom">
-            <p>© <span data-current-year></span> <span data-store-name>${config.name}</span>. جميع الحقوق محفوظة.</p>
+            <p>${t("footer.rights", { year: new Date().getFullYear(), store: storeName })}</p>
           </div>
         </footer>
       `;
@@ -152,9 +199,26 @@
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       if (status) {
-        status.textContent = `تم استلام رسالتك بنجاح. سيتواصل معك فريق ${config.name} خلال وقت قصير.`;
+        status.textContent = t("common.contactSuccess", {
+          store: localize(config.name)
+        });
       }
       form.reset();
+    });
+  }
+
+  function initLanguageSwitch() {
+    const switcher = document.getElementById("languageSwitch");
+    if (!switcher || !i18n) return;
+    switcher.addEventListener("click", (event) => {
+      event.preventDefault();
+      const target = switcher.getAttribute("data-lang-target");
+      if (target !== "ar" && target !== "en") return;
+      i18n.setLanguagePreference(target);
+      const href = switcher.getAttribute("href");
+      if (href) {
+        window.location.href = href;
+      }
     });
   }
 
@@ -169,17 +233,32 @@
   }
 
   window.formatCurrency = function formatCurrency(value) {
-    return `${value.toLocaleString("ar-SA")} ${config.currency}`;
+    const locale = lang === "ar" ? "ar-SA" : "en-SA";
+    const currencyLabel = localize(config.currency, lang);
+    return `${value.toLocaleString(locale)} ${currencyLabel}`;
   };
 
   window.getStoreConfig = function getStoreConfig() {
     return config;
   };
 
+  window.getCurrentLanguage = function getCurrentLanguage() {
+    return lang;
+  };
+
+  window.localizeValue = function localizeValue(value) {
+    return localize(value, lang);
+  };
+
+  window.translateText = function translateText(keyPath, variables) {
+    return t(keyPath, variables);
+  };
+
   renderHeaderFooter();
   applyBrandText();
   applyMetaBranding();
   initMobileMenu();
+  initLanguageSwitch();
   initContactForm();
   initFaq();
 })();

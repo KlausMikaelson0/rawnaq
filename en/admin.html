@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Rawnaq admin panel for beginner-friendly store and product management."
+    />
+    <title>Admin Panel | Rawnaq</title>
+    <link rel="icon" href="../assets/brand/logo-icon.svg" type="image/svg+xml" />
+    <script src="../assets/js/language-init.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <script src="../assets/js/config.js" defer></script>
+    <script src="../assets/js/i18n.js" defer></script>
+    <script src="../assets/js/products-data.js" defer></script>
+    <script src="../assets/js/store-state.js" defer></script>
+    <script src="../assets/js/site.js" defer></script>
+    <script src="../assets/js/admin.js" defer></script>
+  </head>
+  <body
+    data-page="admin"
+    data-title-template="Admin Panel | {store}"
+    data-description-template="{store} admin panel for beginner-friendly store and product management."
+  >
+    <div id="site-header"></div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="section-title">Simple Admin Dashboard</h1>
+          <p class="section-subtitle">
+            Built for non-technical users: update store details, edit products, and export/import
+            a complete backup for full ownership transfer.
+          </p>
+
+          <div class="admin-layout">
+            <section class="admin-panel">
+              <h2>Store Settings</h2>
+              <div class="admin-grid">
+                <div class="dual-inputs">
+                  <label>
+                    Name (AR)
+                    <input id="storeNameAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Name (EN)
+                    <input id="storeNameEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Tagline (AR)
+                    <input id="taglineAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Tagline (EN)
+                    <input id="taglineEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Currency (AR)
+                    <input id="currencyAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Currency (EN)
+                    <input id="currencyEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <label>
+                  Contact Email
+                  <input id="contactEmail" class="input" type="email" />
+                </label>
+                <label>
+                  Contact Phone
+                  <input id="contactPhone" class="input" type="text" />
+                </label>
+                <label>
+                  WhatsApp URL
+                  <input id="contactWhatsapp" class="input" type="url" />
+                </label>
+
+                <div class="dual-inputs">
+                  <label>
+                    Location (AR)
+                    <input id="locationAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Location (EN)
+                    <input id="locationEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Shipping Message (AR)
+                    <input id="shippingAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Shipping Message (EN)
+                    <input id="shippingEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Payment Message (AR)
+                    <input id="paymentAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Payment Message (EN)
+                    <input id="paymentEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Quality Message (AR)
+                    <input id="qualityAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Quality Message (EN)
+                    <input id="qualityEn" class="input" type="text" />
+                  </label>
+                </div>
+              </div>
+
+              <div class="admin-actions">
+                <button id="saveSettingsBtn" class="btn btn-gold" type="button">
+                  Save Settings
+                </button>
+                <button id="resetSettingsBtn" class="btn btn-outline" type="button">
+                  Reset Defaults
+                </button>
+                <button id="exportBackupBtn" class="btn btn-outline" type="button">
+                  Export Backup
+                </button>
+                <label class="btn btn-outline" for="importBackupInput">Import Backup</label>
+                <input id="importBackupInput" type="file" accept="application/json" hidden />
+              </div>
+              <p id="adminSettingsStatus" class="form-status"></p>
+            </section>
+
+            <section class="admin-panel">
+              <h2>Product Editor</h2>
+              <p class="muted">
+                Search by SKU or product name, update fields, then click "Save Product".
+              </p>
+
+              <div class="admin-grid">
+                <label>
+                  Quick Search
+                  <input
+                    id="productSearch"
+                    class="input"
+                    type="search"
+                    placeholder="SKU or product name"
+                  />
+                </label>
+                <label>
+                  Select Product
+                  <select id="productSelect" class="select"></select>
+                </label>
+                <label>
+                  SKU
+                  <input id="productSku" class="input" type="text" readonly />
+                </label>
+
+                <div class="dual-inputs">
+                  <label>
+                    Name (AR)
+                    <input id="productNameAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Name (EN)
+                    <input id="productNameEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Category (AR)
+                    <input id="productCategoryAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Category (EN)
+                    <input id="productCategoryEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Badge (AR)
+                    <input id="productBadgeAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Badge (EN)
+                    <input id="productBadgeEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Concentration (AR)
+                    <input id="productConcentrationAr" class="input" type="text" />
+                  </label>
+                  <label>
+                    Concentration (EN)
+                    <input id="productConcentrationEn" class="input" type="text" />
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Description (AR)
+                    <textarea id="productDescriptionAr" rows="6"></textarea>
+                  </label>
+                  <label>
+                    Description (EN)
+                    <textarea id="productDescriptionEn" rows="6"></textarea>
+                  </label>
+                </div>
+
+                <div class="dual-inputs">
+                  <label>
+                    Volume (ml)
+                    <input id="productVolumeMl" class="input" type="number" min="1" />
+                  </label>
+                  <label>
+                    Original Price
+                    <input id="productOriginalPrice" class="input" type="number" min="1" />
+                  </label>
+                </div>
+
+                <label>
+                  Sale Price
+                  <input id="productSalePrice" class="input" type="number" min="1" />
+                </label>
+              </div>
+
+              <div class="admin-actions">
+                <button id="saveProductBtn" class="btn btn-gold" type="button">
+                  Save Product
+                </button>
+                <button id="resetProductsBtn" class="btn btn-outline" type="button">
+                  Restore Default Catalog
+                </button>
+              </div>
+              <p id="adminProductsStatus" class="form-status"></p>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

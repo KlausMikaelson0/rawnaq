@@ -1,207 +1,223 @@
 "use strict";
 
 (function createProductsData() {
-  const storeName =
-    (window.STORE_CONFIG && window.STORE_CONFIG.name) || "رونق";
+  function pickLocalized(value, lang) {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return value[lang] || value.ar || value.en || "";
+    }
+    return value || "";
+  }
+
+  const defaultConfig = window.DEFAULT_STORE_CONFIG || {};
+  const storeNameAr = pickLocalized(defaultConfig.name, "ar") || "رونق";
+  const storeNameEn = pickLocalized(defaultConfig.name, "en") || "Rawnaq";
 
   const families = [
     {
-      title: "سمو الليل",
-      category: "العطور الشرقية الفاخرة",
-      top: "الزعفران والهيل",
-      heart: "الورد الدمشقي والعنبر",
-      base: "العود والمسك الأبيض",
-      mood: "حضور ملكي للمناسبات الراقية"
+      title: { ar: "سمو الليل", en: "Nocturnal Majesty" },
+      category: { ar: "العطور الشرقية الفاخرة", en: "Luxury Oriental Perfumes" },
+      top: { ar: "الزعفران والهيل", en: "saffron and cardamom" },
+      heart: { ar: "الورد الدمشقي والعنبر", en: "Damask rose and amber" },
+      base: { ar: "العود والمسك الأبيض", en: "aged oud and white musk" },
+      mood: { ar: "حضور ملكي للمناسبات الراقية", en: "a regal aura for refined occasions" }
     },
     {
-      title: "تاج العود",
-      category: "العطور الخشبية الملكية",
-      top: "الفلفل الوردي والبرغموت",
-      heart: "خشب الغاياك والجلد الناعم",
-      base: "عود هندي معتق وفانيلا داكنة",
-      mood: "أناقة حاسمة في اللقاءات الرسمية"
+      title: { ar: "تاج العود", en: "Crown Oud" },
+      category: { ar: "العطور الخشبية الملكية", en: "Royal Woody Perfumes" },
+      top: { ar: "الفلفل الوردي والبرغموت", en: "pink pepper and bergamot" },
+      heart: { ar: "خشب الغاياك والجلد الناعم", en: "guaiac wood and soft leather" },
+      base: { ar: "عود هندي معتق وفانيلا داكنة", en: "mature Indian oud and dark vanilla" },
+      mood: { ar: "أناقة حاسمة في اللقاءات الرسمية", en: "decisive elegance for formal meetings" }
     },
     {
-      title: "همس الياسمين",
-      category: "العطور الزهرية الراقية",
-      top: "الياسمين والكمثرى",
-      heart: "زهرة البرتقال والإيلنغ",
-      base: "مسك حريري وخشب الصندل",
-      mood: "رقي ناعم للإطلالات النهارية"
+      title: { ar: "همس الياسمين", en: "Jasmine Whisper" },
+      category: { ar: "العطور الزهرية الراقية", en: "Refined Floral Perfumes" },
+      top: { ar: "الياسمين والكمثرى", en: "jasmine and pear" },
+      heart: { ar: "زهرة البرتقال والإيلنغ", en: "orange blossom and ylang-ylang" },
+      base: { ar: "مسك حريري وخشب الصندل", en: "silky musk and sandalwood" },
+      mood: { ar: "رقي ناعم للإطلالات النهارية", en: "soft sophistication for daytime wear" }
     },
     {
-      title: "نسيم اللؤلؤ",
-      category: "العطور المنعشة اليومية",
-      top: "الليمون الأخضر والنعناع",
-      heart: "لافندر وماء زهر",
-      base: "أرز أبيض ومسك نقي",
-      mood: "انتعاش فاخر يدوم طوال اليوم"
+      title: { ar: "نسيم اللؤلؤ", en: "Pearl Breeze" },
+      category: { ar: "العطور المنعشة اليومية", en: "Fresh Everyday Perfumes" },
+      top: { ar: "الليمون الأخضر والنعناع", en: "lime and mint" },
+      heart: { ar: "لافندر وماء زهر", en: "lavender and orange flower water" },
+      base: { ar: "أرز أبيض ومسك نقي", en: "white cedar and clean musk" },
+      mood: { ar: "انتعاش فاخر يدوم طوال اليوم", en: "lasting freshness with a premium touch" }
     },
     {
-      title: "رحيق الذهب",
-      category: "العطور الشرقية الفاخرة",
-      top: "قشر البرتقال والزعفران",
-      heart: "العسل الأبيض والسوسن",
-      base: "باتشولي وعنبر ذهبي",
-      mood: "دفء فاخر يلفت الانتباه"
+      title: { ar: "رحيق الذهب", en: "Golden Nectar" },
+      category: { ar: "العطور الشرقية الفاخرة", en: "Luxury Oriental Perfumes" },
+      top: { ar: "قشر البرتقال والزعفران", en: "orange zest and saffron" },
+      heart: { ar: "العسل الأبيض والسوسن", en: "white honey and iris" },
+      base: { ar: "باتشولي وعنبر ذهبي", en: "patchouli and golden amber" },
+      mood: { ar: "دفء فاخر يلفت الانتباه", en: "a luxurious warmth that turns heads" }
     },
     {
-      title: "موج العنبر",
-      category: "العطور الشرقية الفاخرة",
-      top: "نسيم بحري ومندرين",
-      heart: "عنبر رمادي وورد أبيض",
-      base: "طحلب السنديان والمسك",
-      mood: "توازن بين الفخامة والانتعاش"
+      title: { ar: "موج العنبر", en: "Amber Tide" },
+      category: { ar: "العطور الشرقية الفاخرة", en: "Luxury Oriental Perfumes" },
+      top: { ar: "نسيم بحري ومندرين", en: "marine breeze and mandarin" },
+      heart: { ar: "عنبر رمادي وورد أبيض", en: "ambergris and white rose" },
+      base: { ar: "طحلب السنديان والمسك", en: "oakmoss and musk" },
+      mood: { ar: "توازن بين الفخامة والانتعاش", en: "balanced between richness and freshness" }
     },
     {
-      title: "إرث الصندل",
-      category: "العطور الخشبية الملكية",
-      top: "هيل أخضر وبرغموت",
-      heart: "خشب الصندل والكشمير",
-      base: "فانيلا مدخنة وتونكا",
-      mood: "عمق أنيق بطابع نبيل"
+      title: { ar: "إرث الصندل", en: "Sandal Legacy" },
+      category: { ar: "العطور الخشبية الملكية", en: "Royal Woody Perfumes" },
+      top: { ar: "هيل أخضر وبرغموت", en: "green cardamom and bergamot" },
+      heart: { ar: "خشب الصندل والكشمير", en: "sandalwood and cashmere wood" },
+      base: { ar: "فانيلا مدخنة وتونكا", en: "smoked vanilla and tonka bean" },
+      mood: { ar: "عمق أنيق بطابع نبيل", en: "noble depth with elegant character" }
     },
     {
-      title: "شفق الورد",
-      category: "العطور الزهرية الراقية",
-      top: "ورد تركي وتوت أحمر",
-      heart: "فاوانيا وبنفسج",
-      base: "موسك مخملي وخشب أبيض",
-      mood: "أنوثة راقية بطابع فاخر"
+      title: { ar: "شفق الورد", en: "Rose Dusk" },
+      category: { ar: "العطور الزهرية الراقية", en: "Refined Floral Perfumes" },
+      top: { ar: "ورد تركي وتوت أحمر", en: "Turkish rose and red berries" },
+      heart: { ar: "فاوانيا وبنفسج", en: "peony and violet" },
+      base: { ar: "موسك مخملي وخشب أبيض", en: "velvet musk and white woods" },
+      mood: { ar: "أنوثة راقية بطابع فاخر", en: "refined femininity with luxurious depth" }
     },
     {
-      title: "هالة المسك",
-      category: "العطور الزهرية الراقية",
-      top: "ألدهيدات ناعمة وبرغموت",
-      heart: "زنبق ومسك بودري",
-      base: "عنبر أبيض وخشب الأرز",
-      mood: "نظافة فاخرة مريحة للحواس"
+      title: { ar: "هالة المسك", en: "Musk Aura" },
+      category: { ar: "العطور الزهرية الراقية", en: "Refined Floral Perfumes" },
+      top: { ar: "ألدهيدات ناعمة وبرغموت", en: "soft aldehydes and bergamot" },
+      heart: { ar: "زنبق ومسك بودري", en: "lily and powdery musk" },
+      base: { ar: "عنبر أبيض وخشب الأرز", en: "white amber and cedarwood" },
+      mood: { ar: "نظافة فاخرة مريحة للحواس", en: "clean luxury with soothing softness" }
     },
     {
-      title: "صدى الزعفران",
-      category: "العطور الشرقية الفاخرة",
-      top: "زعفران وفلفل أسود",
-      heart: "ورد طائفي وراتنج",
-      base: "لبان وعود معتق",
-      mood: "قوة فاخرة للمساء"
+      title: { ar: "صدى الزعفران", en: "Saffron Echo" },
+      category: { ar: "العطور الشرقية الفاخرة", en: "Luxury Oriental Perfumes" },
+      top: { ar: "زعفران وفلفل أسود", en: "saffron and black pepper" },
+      heart: { ar: "ورد طائفي وراتنج", en: "Taif rose and resins" },
+      base: { ar: "لبان وعود معتق", en: "frankincense and aged oud" },
+      mood: { ar: "قوة فاخرة للمساء", en: "a bold luxury profile for evenings" }
     },
     {
-      title: "سر السحاب",
-      category: "العطور المنعشة اليومية",
-      top: "جريب فروت وزنجبيل",
-      heart: "شاي أخضر وخزامى",
-      base: "موس أبيض وأمبروكسان",
-      mood: "خفّة عصرية بنكهة راقية"
+      title: { ar: "سر السحاب", en: "Cloud Secret" },
+      category: { ar: "العطور المنعشة اليومية", en: "Fresh Everyday Perfumes" },
+      top: { ar: "جريب فروت وزنجبيل", en: "grapefruit and ginger" },
+      heart: { ar: "شاي أخضر وخزامى", en: "green tea and lavender" },
+      base: { ar: "موس أبيض وأمبروكسان", en: "white moss and ambroxan" },
+      mood: { ar: "خفّة عصرية بنكهة راقية", en: "modern lightness with a premium signature" }
     },
     {
-      title: "عطر المخمل",
-      category: "عطور المناسبات الخاصة",
-      top: "كرز أسود وفلفل وردي",
-      heart: "ورد داكن وقرفة",
-      base: "فانيلا سوداء وعنبر كثيف",
-      mood: "جاذبية حاضرة في السهرات"
+      title: { ar: "عطر المخمل", en: "Velvet Veil" },
+      category: { ar: "عطور المناسبات الخاصة", en: "Special Occasion Perfumes" },
+      top: { ar: "كرز أسود وفلفل وردي", en: "black cherry and pink pepper" },
+      heart: { ar: "ورد داكن وقرفة", en: "dark rose and cinnamon" },
+      base: { ar: "فانيلا سوداء وعنبر كثيف", en: "black vanilla and dense amber" },
+      mood: { ar: "جاذبية حاضرة في السهرات", en: "a magnetic presence for evening events" }
     },
     {
-      title: "نبض الفجر",
-      category: "العطور المنعشة اليومية",
-      top: "ليمون صقلي وتفاح أخضر",
-      heart: "نيرولي وخزامى",
-      base: "أخشاب فاتحة ومسك",
-      mood: "طاقة متجددة لبداية اليوم"
+      title: { ar: "نبض الفجر", en: "Dawn Pulse" },
+      category: { ar: "العطور المنعشة اليومية", en: "Fresh Everyday Perfumes" },
+      top: { ar: "ليمون صقلي وتفاح أخضر", en: "Sicilian lemon and green apple" },
+      heart: { ar: "نيرولي وخزامى", en: "neroli and lavender" },
+      base: { ar: "أخشاب فاتحة ومسك", en: "light woods and musk" },
+      mood: { ar: "طاقة متجددة لبداية اليوم", en: "renewed energy for the start of the day" }
     },
     {
-      title: "وتر البنفسج",
-      category: "العطور الزهرية الراقية",
-      top: "بنفسج وإجاص",
-      heart: "سوسن وفاوانيا",
-      base: "خشب الأرز والعنبر",
-      mood: "رهافة فنية بطابع مترف"
+      title: { ar: "وتر البنفسج", en: "Violet Chord" },
+      category: { ar: "العطور الزهرية الراقية", en: "Refined Floral Perfumes" },
+      top: { ar: "بنفسج وإجاص", en: "violet and pear" },
+      heart: { ar: "سوسن وفاوانيا", en: "iris and peony" },
+      base: { ar: "خشب الأرز والعنبر", en: "cedarwood and amber" },
+      mood: { ar: "رهافة فنية بطابع مترف", en: "an artistic floral profile with upscale elegance" }
     },
     {
-      title: "وقار الأرز",
-      category: "العطور الخشبية الملكية",
-      top: "عرعر وبرغموت",
-      heart: "أرز أطلسي ومرمية",
-      base: "باتشولي ومسك رمادي",
-      mood: "شخصية واثقة ومتصالحة"
+      title: { ar: "وقار الأرز", en: "Cedar Prestige" },
+      category: { ar: "العطور الخشبية الملكية", en: "Royal Woody Perfumes" },
+      top: { ar: "عرعر وبرغموت", en: "juniper and bergamot" },
+      heart: { ar: "أرز أطلسي ومرمية", en: "Atlas cedar and sage" },
+      base: { ar: "باتشولي ومسك رمادي", en: "patchouli and grey musk" },
+      mood: { ar: "شخصية واثقة ومتصالحة", en: "a confident and composed personality" }
     },
     {
-      title: "بريق الفانيلا",
-      category: "عطور المناسبات الخاصة",
-      top: "جوز الهند واليوسفي",
-      heart: "فانيلا بوربون وياسمين",
-      base: "سكر محروق ومسك كريمي",
-      mood: "دفء جذاب بإحساس فاخر"
+      title: { ar: "بريق الفانيلا", en: "Vanilla Radiance" },
+      category: { ar: "عطور المناسبات الخاصة", en: "Special Occasion Perfumes" },
+      top: { ar: "جوز الهند واليوسفي", en: "coconut and mandarin" },
+      heart: { ar: "فانيلا بوربون وياسمين", en: "Bourbon vanilla and jasmine" },
+      base: { ar: "سكر محروق ومسك كريمي", en: "burnt sugar and creamy musk" },
+      mood: { ar: "دفء جذاب بإحساس فاخر", en: "warm allure with luxurious comfort" }
     },
     {
-      title: "عاصمة الندى",
-      category: "العطور المنعشة اليومية",
-      top: "ريحان أخضر وليمون",
-      heart: "ماغنوليا وشاي أبيض",
-      base: "خشب كشمير ومسك نقي",
-      mood: "نعومة منعشة مناسبة للعمل"
+      title: { ar: "عاصمة الندى", en: "Dew Capital" },
+      category: { ar: "العطور المنعشة اليومية", en: "Fresh Everyday Perfumes" },
+      top: { ar: "ريحان أخضر وليمون", en: "green basil and lemon" },
+      heart: { ar: "ماغنوليا وشاي أبيض", en: "magnolia and white tea" },
+      base: { ar: "خشب كشمير ومسك نقي", en: "cashmere wood and pure musk" },
+      mood: { ar: "نعومة منعشة مناسبة للعمل", en: "fresh smoothness ideal for daily business wear" }
     },
     {
-      title: "ديوان البخور",
-      category: "العطور الشرقية الفاخرة",
-      top: "لبان وورد مجفف",
-      heart: "بخور عربي وعنبر",
-      base: "عود كمبودي ومسك داكن",
-      mood: "هيبة أصيلة بطابع خليجي"
+      title: { ar: "ديوان البخور", en: "Incense Majlis" },
+      category: { ar: "العطور الشرقية الفاخرة", en: "Luxury Oriental Perfumes" },
+      top: { ar: "لبان وورد مجفف", en: "frankincense and dried rose" },
+      heart: { ar: "بخور عربي وعنبر", en: "Arabic incense and amber" },
+      base: { ar: "عود كمبودي ومسك داكن", en: "Cambodian oud and dark musk" },
+      mood: { ar: "هيبة أصيلة بطابع خليجي", en: "authentic prestige with a Gulf-inspired soul" }
     },
     {
-      title: "روح الكشمير",
-      category: "العطور الخشبية الملكية",
-      top: "هال ناعم وبرغموت",
-      heart: "كشميران وسوسن",
-      base: "صندل وفانيلا خفيفة",
-      mood: "فخامة هادئة للاستخدام اليومي"
+      title: { ar: "روح الكشمير", en: "Cashmere Soul" },
+      category: { ar: "العطور الخشبية الملكية", en: "Royal Woody Perfumes" },
+      top: { ar: "هال ناعم وبرغموت", en: "soft cardamom and bergamot" },
+      heart: { ar: "كشميران وسوسن", en: "cashmeran and iris" },
+      base: { ar: "صندل وفانيلا خفيفة", en: "sandalwood and soft vanilla" },
+      mood: { ar: "فخامة هادئة للاستخدام اليومي", en: "quiet luxury suitable for daily wear" }
     },
     {
-      title: "قصر التوابل",
-      category: "عطور المناسبات الخاصة",
-      top: "قرنفل وقرفة",
-      heart: "ورد أسود وجلد ناعم",
-      base: "باتشولي وبنزوين",
-      mood: "حضور دافئ للمواسم الباردة"
+      title: { ar: "قصر التوابل", en: "Spice Palace" },
+      category: { ar: "عطور المناسبات الخاصة", en: "Special Occasion Perfumes" },
+      top: { ar: "قرنفل وقرفة", en: "clove and cinnamon" },
+      heart: { ar: "ورد أسود وجلد ناعم", en: "dark rose and smooth leather" },
+      base: { ar: "باتشولي وبنزوين", en: "patchouli and benzoin" },
+      mood: { ar: "حضور دافئ للمواسم الباردة", en: "a warm signature for cooler seasons" }
     }
   ];
 
   const editions = [
     {
-      label: "إصدار النخبة",
+      label: { ar: "إصدار النخبة", en: "Elite Edition" },
       sizeMl: 75,
-      concentration: "Eau de Parfum",
+      concentration: { ar: "أو دو بارفان", en: "Eau de Parfum" },
       priceBoost: 0
     },
     {
-      label: "ليالي الخليج",
+      label: { ar: "ليالي الخليج", en: "Gulf Nights" },
       sizeMl: 90,
-      concentration: "Extrait de Parfum",
+      concentration: { ar: "إكستريت دو بارفان", en: "Extrait de Parfum" },
       priceBoost: 45
     },
     {
-      label: "توقيع الحرير",
+      label: { ar: "توقيع الحرير", en: "Silk Signature" },
       sizeMl: 100,
-      concentration: "Eau de Parfum Intense",
+      concentration: { ar: "أو دو بارفان إنتنس", en: "Eau de Parfum Intense" },
       priceBoost: 80
     },
     {
-      label: "نسخة البريستيج",
+      label: { ar: "نسخة البريستيج", en: "Prestige Reserve" },
       sizeMl: 120,
-      concentration: "Royal Concentrate",
+      concentration: { ar: "تركيز ملكي", en: "Royal Concentrate" },
       priceBoost: 135
     }
   ];
 
-  const badges = ["الأكثر طلبًا", "جديد", "إصدار حصري", "عرض خاص"];
+  const badges = [
+    { ar: "الأكثر طلبًا", en: "Best Seller" },
+    { ar: "جديد", en: "New Arrival" },
+    { ar: "إصدار حصري", en: "Exclusive Edition" },
+    { ar: "عرض خاص", en: "Limited Offer" }
+  ];
 
   const products = [];
   let id = 1;
 
   families.forEach((family, familyIndex) => {
     editions.forEach((edition, editionIndex) => {
-      const name = `${family.title} - ${edition.label}`;
+      const name = {
+        ar: `${family.title.ar} - ${edition.label.ar}`,
+        en: `${family.title.en} - ${edition.label.en}`
+      };
       const basePrice = 285 + familyIndex * 18 + edition.priceBoost;
       const discountRate = 0.15 + ((familyIndex + editionIndex) % 4) * 0.04;
       const salePrice = Math.round(basePrice * (1 - discountRate));
@@ -209,12 +225,20 @@
       const sku = `RNQ-${String(id).padStart(4, "0")}`;
       const badge = badges[(familyIndex + editionIndex) % badges.length];
 
-      const description = [
-        `عطر "${name}" يجسد فلسفة الفخامة الهادئة عبر افتتاحية من ${family.top} ثم قلب عطري متوازن من ${family.heart}، لينتهي بقاعدة ثابتة من ${family.base}.`,
-        `تم تطوير هذه التركيبة لتقديم ${family.mood} مع ثبات عالٍ وفوحان متدرج يناسب أجواء السوق الخليجي سواء في الاجتماعات اليومية أو المناسبات المسائية.`,
-        `يأتي هذا الإصدار بسعة ${edition.sizeMl} مل وتركيز ${edition.concentration}، ما يمنحك أداءً احترافيًا يدوم لساعات طويلة مع بصمة أنيقة لا تُنسى.`,
-        `إذا كنت تبحث عن توقيع عطري يعكس الذوق الرفيع ويجمع بين الأصالة والحداثة، فهذا المنتج خيار مثالي ضمن تشكيلات ${storeName} الجاهزة للتشغيل الفوري.`
-      ].join(" ");
+      const description = {
+        ar: [
+          `عطر "${name.ar}" يجسد فلسفة الفخامة الهادئة عبر افتتاحية من ${family.top.ar} ثم قلب عطري متوازن من ${family.heart.ar}، لينتهي بقاعدة ثابتة من ${family.base.ar}.`,
+          `تم تطوير هذه التركيبة لتقديم ${family.mood.ar} مع ثبات عالٍ وفوحان متدرج يناسب أجواء السوق الخليجي سواء في الاجتماعات اليومية أو المناسبات المسائية.`,
+          `يأتي هذا الإصدار بسعة ${edition.sizeMl} مل وتركيز ${edition.concentration.ar}، ما يمنحك أداءً احترافيًا يدوم لساعات طويلة مع بصمة أنيقة لا تُنسى.`,
+          `إذا كنت تبحث عن توقيع عطري يعكس الذوق الرفيع ويجمع بين الأصالة والحداثة، فهذا المنتج خيار مثالي ضمن تشكيلات ${storeNameAr} الجاهزة للتشغيل الفوري.`
+        ].join(" "),
+        en: [
+          `"${name.en}" represents quiet luxury, opening with ${family.top.en}, moving into a balanced heart of ${family.heart.en}, and settling into a long-lasting base of ${family.base.en}.`,
+          `The blend is crafted to deliver ${family.mood.en}, with strong longevity and refined diffusion suited to both daytime business and evening occasions across the Gulf market.`,
+          `This release comes in ${edition.sizeMl} ml at ${edition.concentration.en} strength, delivering a polished performance and a memorable scent trail.`,
+          `If you are building a signature fragrance wardrobe that blends heritage with modern elegance, this scent is a premium choice from the ${storeNameEn} collection.`
+        ].join(" ")
+      };
 
       products.push({
         id,
@@ -231,12 +255,12 @@
         originalPrice,
         salePrice,
         discountPercent: Math.round((1 - salePrice / originalPrice) * 100),
-        stockStatus: "متوفر",
+        stockStatus: { ar: "متوفر", en: "In Stock" },
         imageTone: (familyIndex + editionIndex) % 5
       });
       id += 1;
     });
   });
 
-  window.PRODUCTS = Object.freeze(products);
+  window.DEFAULT_PRODUCTS = Object.freeze(products);
 })();

@@ -2,38 +2,54 @@
 
 (function initProductsPage() {
   if (document.body?.dataset?.page !== "products") return;
-  const products = window.PRODUCTS || [];
+
+  const products = window.StoreState
+    ? window.StoreState.getProducts()
+    : window.DEFAULT_PRODUCTS || [];
 
   const listRoot = document.getElementById("productsGrid");
   const filtersRoot = document.getElementById("categoryFilters");
   const searchInput = document.getElementById("searchProducts");
   const sortSelect = document.getElementById("sortProducts");
   const countLabel = document.getElementById("resultsCount");
+  const i18n = window.I18N;
+  const localize = window.localizeValue || ((value) => value);
+  const t = window.translateText || ((keyPath) => keyPath);
 
   if (!listRoot || !filtersRoot || !countLabel) return;
 
+  function localizeIn(value, forcedLanguage) {
+    if (i18n && typeof i18n.localize === "function") {
+      return i18n.localize(value, forcedLanguage);
+    }
+    return localize(value);
+  }
+
   const state = {
-    category: "الكل",
+    category: "__all__",
     query: "",
     sortBy: "featured"
   };
 
-  const categories = ["الكل", ...new Set(products.map((item) => item.category))];
+  const categories = [...new Set(products.map((item) => localize(item.category)))];
 
   function renderFilters() {
-    filtersRoot.innerHTML = categories
-      .map(
-        (category) => `
-      <button class="chip ${state.category === category ? "active" : ""}" data-category="${category}">
-        ${category}
-      </button>
+    const allLabel = t("common.allCategories");
+    filtersRoot.innerHTML =
+      `
+      <button class="chip ${state.category === "__all__" ? "active" : ""}" data-category="__all__">${allLabel}</button>
+    ` +
+      categories
+        .map(
+          (category) => `
+      <button class="chip ${state.category === category ? "active" : ""}" data-category="${category}">${category}</button>
     `
-      )
-      .join("");
+        )
+        .join("");
 
     filtersRoot.querySelectorAll("button[data-category]").forEach((button) => {
       button.addEventListener("click", () => {
-        state.category = button.dataset.category || "الكل";
+        state.category = button.dataset.category || "__all__";
         renderFilters();
         renderProducts();
       });
@@ -57,15 +73,22 @@
     const query = state.query.trim().toLowerCase();
     let items = products.filter((item) => {
       const matchesCategory =
-        state.category === "الكل" || item.category === state.category;
+        state.category === "__all__" || localize(item.category) === state.category;
       if (!matchesCategory) return false;
       if (!query) return true;
-      return (
-        item.name.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query) ||
-        item.sku.toLowerCase().includes(query)
-      );
+
+      const haystack = [
+        localizeIn(item.name, "ar"),
+        localizeIn(item.name, "en"),
+        localizeIn(item.description, "ar"),
+        localizeIn(item.description, "en"),
+        localizeIn(item.category, "ar"),
+        localizeIn(item.category, "en"),
+        item.sku
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(query);
     });
 
     items = applySort(items);
@@ -74,13 +97,13 @@
 
   function renderProducts() {
     const items = filterProducts();
-    countLabel.textContent = `${items.length} منتج`;
+    countLabel.textContent = t("common.resultCount", { count: items.length });
 
     if (!items.length) {
       listRoot.innerHTML = `
         <div class="empty-state">
-          <h3>لا توجد نتائج مطابقة</h3>
-          <p>غيّر كلمات البحث أو اختر تصنيفًا مختلفًا لعرض منتجات أخرى.</p>
+          <h3>${t("common.noResultsTitle")}</h3>
+          <p>${t("common.noResultsDesc")}</p>
         </div>
       `;
       return;
@@ -90,27 +113,31 @@
       .map((item) => {
         return `
           <article class="product-card tone-${item.imageTone}" id="product-${item.id}">
-            <span class="product-badge">${item.badge}</span>
+            <span class="product-badge">${localize(item.badge)}</span>
             <div class="product-thumb" aria-hidden="true">
               <span>${item.volumeMl}ml</span>
             </div>
-            <h3>${item.name}</h3>
-            <p class="product-category">${item.category}</p>
-            <p class="product-description">${item.description}</p>
+            <h3>${localize(item.name)}</h3>
+            <p class="product-category">${localize(item.category)}</p>
+            <p class="product-description">${localize(item.description)}</p>
             <ul class="product-meta">
-              <li><strong>SKU:</strong> ${item.sku}</li>
-              <li><strong>التركيز:</strong> ${item.concentration}</li>
-              <li><strong>الحجم:</strong> ${item.volumeMl} مل</li>
-              <li><strong>الثبات:</strong> عالي</li>
+              <li><strong>${t("common.sku")}:</strong> ${item.sku}</li>
+              <li><strong>${t("common.concentration")}:</strong> ${localize(item.concentration)}</li>
+              <li><strong>${t("common.size")}:</strong> ${item.volumeMl} ${t("common.ml")}</li>
+              <li><strong>${t("common.longevity")}:</strong> ${t("common.high")}</li>
             </ul>
             <div class="price-wrap">
               <span class="price-sale">${window.formatCurrency(item.salePrice)}</span>
               <span class="price-original">${window.formatCurrency(item.originalPrice)}</span>
-              <span class="discount">خصم ${item.discountPercent}%</span>
+              <span class="discount">${t("common.discount", {
+                value: item.discountPercent
+              })}</span>
             </div>
             <div class="card-actions">
-              <button class="btn btn-gold">اشترِ الآن</button>
-              <a class="btn btn-outline" href="contact.html">استفسر قبل الطلب</a>
+              <a class="btn btn-gold" href="checkout.html?sku=${encodeURIComponent(
+                item.sku
+              )}">${t("common.buyNow")}</a>
+              <a class="btn btn-outline" href="contact.html">${t("common.askBeforeOrder")}</a>
             </div>
           </article>
         `;
