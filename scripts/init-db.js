@@ -26,6 +26,15 @@ if (shouldReset && fs.existsSync(DB_PATH)) {
   process.stdout.write(`Database removed: ${DB_PATH}\n`);
 }
 
+if (shouldReset) {
+  [ `${DB_PATH}-wal`, `${DB_PATH}-shm` ].forEach((pathToRemove) => {
+    if (fs.existsSync(pathToRemove)) {
+      fs.unlinkSync(pathToRemove);
+      process.stdout.write(`Database sidecar removed: ${pathToRemove}\n`);
+    }
+  });
+}
+
 const db = new Database(DB_PATH);
 db.pragma("journal_mode = WAL");
 db.pragma("foreign_keys = ON");
