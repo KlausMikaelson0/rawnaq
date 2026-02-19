@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="تصفح تشكيلة رونق من العطور الفاخرة: 80 منتجًا منظّمًا بتصنيفات واضحة وأسعار أصلية ومخفّضة."
+    />
+    <title>المنتجات | رونق</title>
+    <link rel="icon" href="assets/brand/logo-icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script src="assets/js/config.js" defer></script>
+    <script src="assets/js/products-data.js" defer></script>
+    <script src="assets/js/site.js" defer></script>
+    <script src="assets/js/products-page.js" defer></script>
+  </head>
+  <body
+    data-page="products"
+    data-title-template="المنتجات | {store}"
+    data-description-template="تصفح تشكيلة {store} من العطور الفاخرة: 80 منتجًا منظّمًا بتصنيفات واضحة وأسعار أصلية ومخفّضة."
+  >
+    <div id="site-header"></div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="section-title">
+            تشكيلة <span class="gold" data-store-name>رونق</span> الاحترافية
+          </h1>
+          <p class="section-subtitle">
+            جميع العطور أدناه مجهزة للاستخدام التسويقي المباشر: أسماء جذابة، وصف احترافي طويل،
+            وتسعير مزدوج يدعم الحملات البيعية والعروض الموسمية.
+          </p>
+
+          <div class="toolbar">
+            <input
+              class="input"
+              id="searchProducts"
+              type="search"
+              placeholder="ابحث بالاسم أو الوصف أو SKU"
+              aria-label="بحث المنتجات"
+            />
+            <select class="select" id="sortProducts" aria-label="ترتيب المنتجات">
+              <option value="featured">الترتيب الافتراضي</option>
+              <option value="price-low">الأقل سعرًا</option>
+              <option value="price-high">الأعلى سعرًا</option>
+              <option value="discount">الأعلى خصمًا</option>
+            </select>
+          </div>
+
+          <div id="categoryFilters" class="chips section-sm"></div>
+          <p class="results-line">النتائج: <strong id="resultsCount">0 منتج</strong></p>
+          <div id="productsGrid" class="cards-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>
