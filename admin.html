@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
     <script src="assets/js/config.js" defer></script>
     <script src="assets/js/i18n.js" defer></script>
-    <script src="assets/js/products-data.js" defer></script>
-    <script src="assets/js/store-state.js" defer></script>
+    <script src="assets/js/api.js" defer></script>
+    <script src="assets/js/cart-store.js" defer></script>
     <script src="assets/js/site.js" defer></script>
     <script src="assets/js/admin.js" defer></script>
   </head>
@@ -239,6 +239,9 @@
               </div>
 
               <div class="admin-actions">
+                <button id="newProductBtn" class="btn btn-outline" type="button">
+                  منتج جديد
+                </button>
                 <button id="saveProductBtn" class="btn btn-gold" type="button">
                   حفظ المنتج
                 </button>
@@ -247,6 +250,30 @@
                 </button>
               </div>
               <p id="adminProductsStatus" class="form-status"></p>
+            </section>
+
+            <section class="admin-panel">
+              <h2>إدارة الطلبات</h2>
+              <p class="muted">تحديث حالة الطلبات الواردة ومراجعة تفاصيل العملاء.</p>
+              <div class="admin-grid">
+                <button id="refreshOrdersBtn" class="btn btn-outline" type="button">
+                  تحديث الطلبات
+                </button>
+                <div id="ordersList" class="feature-grid"></div>
+              </div>
+              <p id="adminOrdersStatus" class="form-status"></p>
+            </section>
+
+            <section class="admin-panel">
+              <h2>إدارة العملاء</h2>
+              <p class="muted">قائمة العملاء مع إجمالي الطلبات والإنفاق.</p>
+              <div class="admin-grid">
+                <button id="refreshCustomersBtn" class="btn btn-outline" type="button">
+                  تحديث العملاء
+                </button>
+                <div id="customersList" class="feature-grid"></div>
+              </div>
+              <p id="adminCustomersStatus" class="form-status"></p>
             </section>
           </div>
         </div>

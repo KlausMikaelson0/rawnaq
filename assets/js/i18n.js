@@ -7,6 +7,8 @@
       nav: {
         home: "الرئيسية",
         products: "المنتجات",
+        cart: "السلة",
+        faq: "الأسئلة الشائعة",
         about: "من نحن",
         contact: "تواصل معنا",
         checkout: "الدفع"
@@ -28,6 +30,8 @@
         returns: "سياسة الاسترجاع",
         contact: "تواصل معنا",
         checkout: "الدفع الآمن",
+        faq: "الأسئلة الشائعة",
+        cart: "السلة",
         admin: "لوحة التحكم",
         email: "البريد",
         phone: "الهاتف",
@@ -71,6 +75,17 @@
         secureInfo:
           "قنوات دفع مشفّرة ومعايير حماية معتمدة لبناء الثقة عند إتمام الطلب."
       },
+      cart: {
+        add: "أضف للسلة",
+        added: "تمت إضافة المنتج إلى السلة.",
+        openCart: "عرض السلة",
+        totalItems: "عدد القطع",
+        lineTotal: "الإجمالي",
+        remove: "حذف من السلة",
+        emptyTitle: "السلة فارغة",
+        emptyDesc: "أضف منتجات من صفحة المنتجات لبدء الطلب.",
+        goShopping: "تصفح المنتجات"
+      },
       admin: {
         savedSettings: "تم حفظ إعدادات المتجر بنجاح.",
         resetSettings: "تمت إعادة إعدادات المتجر للوضع الافتراضي.",
@@ -85,6 +100,8 @@
       nav: {
         home: "Home",
         products: "Products",
+        cart: "Cart",
+        faq: "FAQ",
         about: "About",
         contact: "Contact",
         checkout: "Checkout"
@@ -106,6 +123,8 @@
         returns: "Return Policy",
         contact: "Contact Us",
         checkout: "Secure Checkout",
+        faq: "FAQ",
+        cart: "Cart",
         admin: "Admin Panel",
         email: "Email",
         phone: "Phone",
@@ -147,6 +166,17 @@
           "Your order has been submitted through a secure payment flow. Our team will confirm shipment shortly.",
         secureInfo:
           "Encrypted payment channels and certified protection standards to build checkout trust."
+      },
+      cart: {
+        add: "Add to Cart",
+        added: "Product added to cart.",
+        openCart: "View Cart",
+        totalItems: "Items",
+        lineTotal: "Line Total",
+        remove: "Remove",
+        emptyTitle: "Your cart is empty",
+        emptyDesc: "Add products from the catalog to continue checkout.",
+        goShopping: "Browse Products"
       },
       admin: {
         savedSettings: "Store settings were saved successfully.",

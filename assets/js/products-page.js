@@ -1,11 +1,14 @@
 "use strict";
 
-(function initProductsPage() {
+(async function initProductsPage() {
   if (document.body?.dataset?.page !== "products") return;
-
-  const products = window.StoreState
-    ? window.StoreState.getProducts()
-    : window.DEFAULT_PRODUCTS || [];
+  if (!window.PublicAPI) return;
+  let products = [];
+  try {
+    products = await window.PublicAPI.getProducts();
+  } catch (_error) {
+    return;
+  }
 
   const listRoot = document.getElementById("productsGrid");
   const filtersRoot = document.getElementById("categoryFilters");
@@ -134,15 +137,27 @@
               })}</span>
             </div>
             <div class="card-actions">
-              <a class="btn btn-gold" href="checkout.html?sku=${encodeURIComponent(
+              <button class="btn btn-gold" data-add-to-cart="${item.sku}">${t("cart.add")}</button>
+              <a class="btn btn-outline" href="checkout.html?sku=${encodeURIComponent(
                 item.sku
               )}">${t("common.buyNow")}</a>
-              <a class="btn btn-outline" href="contact.html">${t("common.askBeforeOrder")}</a>
             </div>
           </article>
         `;
       })
       .join("");
+
+    listRoot.querySelectorAll("[data-add-to-cart]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const sku = button.getAttribute("data-add-to-cart") || "";
+        if (window.CartStore) {
+          window.CartStore.addItem(sku, 1);
+        }
+        if (window.refreshLayout) {
+          window.refreshLayout();
+        }
+      });
+    });
   }
 
   if (searchInput) {

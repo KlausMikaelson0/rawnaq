@@ -1,16 +1,15 @@
 "use strict";
 
-(function initCheckoutPage() {
+(async function initCheckoutPage() {
   if (document.body?.dataset?.page !== "checkout") return;
+  if (!window.PublicAPI) return;
 
-  const config = window.StoreState
-    ? window.StoreState.getConfig()
+  const config = window.getStoreConfig
+    ? window.getStoreConfig()
     : window.DEFAULT_STORE_CONFIG || {};
-  const products = window.StoreState
-    ? window.StoreState.getProducts()
-    : window.DEFAULT_PRODUCTS || [];
   const localize = window.localizeValue || ((value) => value);
   const t = window.translateText || ((keyPath) => keyPath);
+  const cartStore = window.CartStore;
 
   const methodsRoot = document.getElementById("paymentMethods");
   const badgesRoot = document.getElementById("paymentBadges");
@@ -24,12 +23,60 @@
   if (!methodsRoot || !summaryRoot || !form || !payButton) return;
 
   const params = new URLSearchParams(window.location.search);
-  const requestedSku = params.get("sku");
-  const quantity = Math.max(1, Number(params.get("qty") || 1));
+  const requestedSku = String(params.get("sku") || "")
+    .trim()
+    .toUpperCase();
+  const requestedQty = Math.max(1, Number(params.get("qty") || 1));
+  const requestedCart = params.get("cart");
 
-  const selectedProduct =
-    products.find((item) => item.sku === requestedSku) || products[0] || null;
-  if (!selectedProduct) return;
+  if (cartStore) {
+    if (requestedCart) {
+      try {
+        const parsed = JSON.parse(requestedCart);
+        if (Array.isArray(parsed)) {
+          cartStore.setItems(parsed);
+        }
+      } catch (_error) {
+        // ignore malformed cart query
+      }
+    } else if (requestedSku) {
+      cartStore.addItem(requestedSku, requestedQty);
+    }
+  }
+
+  const rawItems = cartStore ? cartStore.getItems() : [];
+  if (!rawItems.length) {
+    summaryRoot.innerHTML = `
+      <div class="empty-state">
+        <h3>${t("cart.emptyTitle")}</h3>
+        <p>${t("cart.emptyDesc")}</p>
+        <a class="btn btn-gold" href="products.html">${t("cart.goShopping")}</a>
+      </div>
+    `;
+    payButton.disabled = true;
+    return;
+  }
+
+  const products = [];
+  for (const item of rawItems) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const product = await window.PublicAPI.getProductBySku(item.sku);
+      if (product) {
+        products.push({
+          ...item,
+          product
+        });
+      }
+    } catch (_error) {
+      // ignore missing products in cart
+    }
+  }
+
+  if (!products.length) {
+    payButton.disabled = true;
+    return;
+  }
 
   const methodLabels = {
     card: {
@@ -95,30 +142,53 @@
   }
 
   function updatePayButton() {
-    const total = selectedProduct.salePrice * quantity;
+    const total = products.reduce(
+      (sum, item) => sum + item.product.salePrice * item.quantity,
+      0
+    );
     payButton.textContent = `${t("checkout.payNow")} • ${window.formatCurrency(total)}`;
   }
 
   function renderSummary() {
-    const subtotal = selectedProduct.salePrice * quantity;
+    const subtotal = products.reduce(
+      (sum, item) => sum + item.product.salePrice * item.quantity,
+      0
+    );
     const total = subtotal;
-    const productName = localize(selectedProduct.name);
 
     summaryRoot.innerHTML = `
-      <h3>${productName}</h3>
-      <p class="product-category">${localize(selectedProduct.category)}</p>
+      <h3>${t("checkout.total")}</h3>
+      <div class="cards-grid">
+        ${products
+          .map((entry) => {
+            return `
+              <article class="product-card tone-${entry.product.imageTone}">
+                <h3>${localize(entry.product.name)}</h3>
+                <p class="product-category">${localize(entry.product.category)}</p>
+                <ul class="order-lines">
+                  <li><span>${t("common.sku")}</span><strong>${entry.product.sku}</strong></li>
+                  <li><span>${t("checkout.qty")}</span><strong>${entry.quantity}</strong></li>
+                  <li><span>${t("cart.lineTotal")}</span><strong>${window.formatCurrency(
+                    entry.product.salePrice * entry.quantity
+                  )}</strong></li>
+                </ul>
+              </article>
+            `;
+          })
+          .join("")}
+      </div>
       <ul class="order-lines">
-        <li><span>${t("common.sku")}</span><strong>${selectedProduct.sku}</strong></li>
-        <li><span>${t("common.size")}</span><strong>${selectedProduct.volumeMl} ${t("common.ml")}</strong></li>
-        <li><span>${t("common.concentration")}</span><strong>${localize(selectedProduct.concentration)}</strong></li>
-        <li><span>${t("checkout.qty")}</span><strong>${quantity}</strong></li>
+        <li><span>${t("cart.totalItems")}</span><strong>${products.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        )}</strong></li>
         <li><span>${t("checkout.subtotal")}</span><strong>${window.formatCurrency(subtotal)}</strong></li>
         <li class="order-total"><span>${t("checkout.total")}</span><strong>${window.formatCurrency(total)}</strong></li>
       </ul>
     `;
   }
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (status) status.textContent = "";
 
@@ -126,15 +196,50 @@
     payButton.disabled = true;
     payButton.textContent = "...";
 
-    window.setTimeout(() => {
-      if (status) {
-        status.textContent = t("checkout.success");
+    try {
+      const data = new FormData(form);
+      const order = await window.PublicAPI.createOrder({
+        paymentMethod: selectedMethod,
+        customer: {
+          fullName: String(data.get("fullName") || "").trim(),
+          email: String(data.get("email") || "").trim(),
+          phone: String(data.get("phone") || "").trim(),
+          city: String(data.get("city") || "").trim(),
+          address: String(data.get("address") || "").trim()
+        },
+        notes: String(data.get("notes") || "").trim(),
+        items: products.map((entry) => ({
+          sku: entry.product.sku,
+          quantity: entry.quantity
+        }))
+      });
+
+      if (cartStore) {
+        cartStore.clearCart();
       }
-      payButton.disabled = false;
-      payButton.textContent = submitOriginal;
+      if (window.refreshLayout) {
+        window.refreshLayout();
+      }
+      if (status) {
+        status.textContent = `${t("checkout.success")} #${order.orderNumber}`;
+      }
+      summaryRoot.innerHTML = `
+        <div class="content-card">
+          <h3>#${order.orderNumber}</h3>
+          <p>${t("checkout.success")}</p>
+        </div>
+      `;
+      payButton.disabled = true;
+      payButton.textContent = `${t("checkout.payNow")} ✓`;
       form.reset();
       toggleCardFields();
-    }, 700);
+    } catch (error) {
+      if (status) status.textContent = error.message || "Unable to submit order.";
+    } finally {
+      if (!payButton.disabled) {
+        payButton.textContent = submitOriginal;
+      }
+    }
   });
 
   if (secureInfo) {

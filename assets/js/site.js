@@ -1,12 +1,20 @@
 "use strict";
 
-(function initSite() {
+(async function initSite() {
   const i18n = window.I18N;
   const lang = i18n ? i18n.getCurrentLanguage() : "ar";
-  const config = window.StoreState
-    ? window.StoreState.getConfig()
-    : window.DEFAULT_STORE_CONFIG || {};
   const page = document.body?.dataset?.page || "";
+  const publicApi = window.PublicAPI;
+  const defaultConfig = window.DEFAULT_STORE_CONFIG || {};
+  let config = defaultConfig;
+
+  try {
+    if (publicApi) {
+      config = (await publicApi.getSettings()) || defaultConfig;
+    }
+  } catch (_error) {
+    config = defaultConfig;
+  }
 
   function localize(value, targetLang) {
     if (i18n && typeof i18n.localize === "function") {
@@ -34,6 +42,11 @@
 
   function getTargetLanguage() {
     return lang === "ar" ? "en" : "ar";
+  }
+
+  function cartItemCount() {
+    if (!window.CartStore) return 0;
+    return window.CartStore.getItemCount();
   }
 
   function applyBrandText() {
@@ -114,6 +127,9 @@
     const headerRoot = document.getElementById("site-header");
     const footerRoot = document.getElementById("site-footer");
 
+    const cartCount = cartItemCount();
+    const cartLabel = `${t("nav.cart")} (${cartCount})`;
+
     if (headerRoot) {
       headerRoot.innerHTML = `
         <header class="site-header">
@@ -129,9 +145,11 @@
             <nav id="mainNav" class="main-nav" aria-label="${t("header.menuAria")}">
               <a class="${navLinkClass("home")}" href="index.html">${t("nav.home")}</a>
               <a class="${navLinkClass("products")}" href="products.html">${t("nav.products")}</a>
+              <a class="${navLinkClass("cart")}" href="cart.html">${cartLabel}</a>
+              <a class="${navLinkClass("checkout")}" href="checkout.html">${t("nav.checkout")}</a>
+              <a class="${navLinkClass("faq")}" href="faq.html">${t("nav.faq")}</a>
               <a class="${navLinkClass("about")}" href="about.html">${t("nav.about")}</a>
               <a class="${navLinkClass("contact")}" href="contact.html">${t("nav.contact")}</a>
-              <a class="${navLinkClass("checkout")}" href="checkout.html">${t("nav.checkout")}</a>
             </nav>
             <div class="header-actions">
               <a id="languageSwitch" class="btn btn-outline lang-toggle" href="${languageHref}" data-lang-target="${targetLanguage}">
@@ -150,9 +168,7 @@
           <div class="container footer-grid">
             <section>
               <h3>${t("footer.aboutTitle", { store: storeName })}</h3>
-              <p>
-                ${t("footer.aboutText")}
-              </p>
+              <p>${t("footer.aboutText")}</p>
             </section>
             <section>
               <h3>${t("footer.linksTitle")}</h3>
@@ -162,6 +178,8 @@
                 <li><a href="returns.html">${t("footer.returns")}</a></li>
                 <li><a href="contact.html">${t("footer.contact")}</a></li>
                 <li><a href="checkout.html">${t("footer.checkout")}</a></li>
+                <li><a href="cart.html">${t("footer.cart")}</a></li>
+                <li><a href="faq.html">${t("footer.faq")}</a></li>
                 <li><a href="admin.html">${t("footer.admin")}</a></li>
               </ul>
             </section>
@@ -194,16 +212,31 @@
 
   function initContactForm() {
     const form = document.getElementById("contactForm");
-    if (!form) return;
+    if (!form || !publicApi) return;
     const status = document.getElementById("formStatus");
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      if (status) {
-        status.textContent = t("common.contactSuccess", {
-          store: localize(config.name)
-        });
+      if (status) status.textContent = "";
+
+      const formData = new FormData(form);
+      const payload = {
+        fullName: String(formData.get("name") || "").trim(),
+        phone: String(formData.get("phone") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        message: String(formData.get("message") || "").trim()
+      };
+
+      try {
+        await publicApi.sendContact(payload);
+        if (status) {
+          status.textContent = t("common.contactSuccess", {
+            store: localize(config.name)
+          });
+        }
+        form.reset();
+      } catch (error) {
+        if (status) status.textContent = error.message || "Unable to send message.";
       }
-      form.reset();
     });
   }
 
@@ -222,7 +255,7 @@
     });
   }
 
-  function initFaq() {
+  function initFaqAccordion() {
     document.querySelectorAll(".faq-item").forEach((item) => {
       const button = item.querySelector(".faq-question");
       if (!button) return;
@@ -235,7 +268,7 @@
   window.formatCurrency = function formatCurrency(value) {
     const locale = lang === "ar" ? "ar-SA" : "en-SA";
     const currencyLabel = localize(config.currency, lang);
-    return `${value.toLocaleString(locale)} ${currencyLabel}`;
+    return `${Number(value || 0).toLocaleString(locale)} ${currencyLabel}`;
   };
 
   window.getStoreConfig = function getStoreConfig() {
@@ -254,11 +287,19 @@
     return t(keyPath, variables);
   };
 
+  window.refreshLayout = function refreshLayout() {
+    renderHeaderFooter();
+    applyBrandText();
+    initMobileMenu();
+    initLanguageSwitch();
+    initFaqAccordion();
+  };
+
   renderHeaderFooter();
   applyBrandText();
   applyMetaBranding();
   initMobileMenu();
   initLanguageSwitch();
   initContactForm();
-  initFaq();
+  initFaqAccordion();
 })();

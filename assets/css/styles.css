@@ -215,6 +215,11 @@ main {
   background: rgba(200, 169, 111, 0.1);
 }
 
+.is-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .header-cta {
   display: none;
 }

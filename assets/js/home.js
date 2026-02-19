@@ -1,10 +1,14 @@
 "use strict";
 
-(function initHomePage() {
+(async function initHomePage() {
   if (document.body?.dataset?.page !== "home") return;
-  const products = window.StoreState
-    ? window.StoreState.getProducts()
-    : window.DEFAULT_PRODUCTS || [];
+  if (!window.PublicAPI) return;
+  let products = [];
+  try {
+    products = await window.PublicAPI.getProducts({ sort: "discount" });
+  } catch (_error) {
+    return;
+  }
   if (!products.length) return;
 
   const featuredRoot = document.getElementById("featuredProducts");
@@ -50,11 +54,26 @@
             <span class="price-sale">${window.formatCurrency(item.salePrice)}</span>
             <span class="price-original">${window.formatCurrency(item.originalPrice)}</span>
           </div>
-          <a class="btn btn-outline" href="checkout.html?sku=${encodeURIComponent(item.sku)}">${t(
-            "common.orderNow"
-          )}</a>
+          <div class="card-actions">
+            <button class="btn btn-gold" data-add-to-cart="${item.sku}">${t("cart.add")}</button>
+            <a class="btn btn-outline" href="checkout.html?sku=${encodeURIComponent(item.sku)}">${t(
+              "common.orderNow"
+            )}</a>
+          </div>
         </article>
       `;
     })
     .join("");
+
+  featuredRoot.querySelectorAll("[data-add-to-cart]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const sku = button.getAttribute("data-add-to-cart") || "";
+      if (window.CartStore) {
+        window.CartStore.addItem(sku, 1);
+      }
+      if (window.refreshLayout) {
+        window.refreshLayout();
+      }
+    });
+  });
 })();

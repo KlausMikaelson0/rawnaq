@@ -10,7 +10,7 @@ const {
   SESSION_TTL_HOURS
 } = require("./config");
 const { db, nowIso } = require("./db");
-const { buildStoreSettings } = require("./seed-data");
+const { buildStoreSettings, generateProducts } = require("./seed-data");
 
 const app = express();
 
@@ -797,6 +797,39 @@ app.delete("/api/admin/products/:id", requireAdmin, (req, res) => {
     id
   );
   return res.json({ ok: true });
+});
+
+app.post("/api/admin/products/reset-default", requireAdmin, (_req, res) => {
+  const timestamp = nowIso();
+  const defaults = generateProducts();
+  const insertProduct = db.prepare(
+    `
+      INSERT INTO products (
+        sku, name_ar, name_en, category_ar, category_en, badge_ar, badge_en,
+        description_ar, description_en, concentration_ar, concentration_en,
+        volume_ml, original_price, sale_price, discount_percent, stock_status_ar,
+        stock_status_en, image_tone, is_active, created_at, updated_at
+      ) VALUES (
+        @sku, @name_ar, @name_en, @category_ar, @category_en, @badge_ar, @badge_en,
+        @description_ar, @description_en, @concentration_ar, @concentration_en,
+        @volume_ml, @original_price, @sale_price, @discount_percent, @stock_status_ar,
+        @stock_status_en, @image_tone, 1, @created_at, @updated_at
+      )
+    `
+  );
+
+  db.transaction(() => {
+    db.prepare("DELETE FROM products").run();
+    defaults.forEach((item) => {
+      insertProduct.run({
+        ...item,
+        created_at: timestamp,
+        updated_at: timestamp
+      });
+    });
+  })();
+
+  return res.json({ ok: true, count: defaults.length });
 });
 
 app.get("/api/admin/orders", requireAdmin, (_req, res) => {
