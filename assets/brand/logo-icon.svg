@@ -1,0 +1,16 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lg" x1="62" y1="38" x2="434" y2="462" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E2C486" />
+      <stop offset="0.58" stop-color="#C5A35F" />
+      <stop offset="1" stop-color="#9A773E" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="92" fill="#0B0B0D" />
+  <rect x="12" y="12" width="488" height="488" rx="80" stroke="#3B2F1F" stroke-width="3" />
+  <rect x="214" y="66" width="84" height="46" rx="14" fill="url(#lg)" />
+  <path d="M194 108H318V160C318 171.046 309.046 180 298 180H214C202.954 180 194 171.046 194 160V108Z" fill="url(#lg)" />
+  <path d="M152 178C152 145.967 177.967 120 210 120H302C334.033 120 360 145.967 360 178V335C360 373.66 328.66 405 290 405H222C183.34 405 152 373.66 152 335V178Z" fill="#141414" stroke="url(#lg)" stroke-width="12"/>
+  <path d="M188 212C188 203.163 195.163 196 204 196H308C316.837 196 324 203.163 324 212V313C324 335.091 306.091 353 284 353H228C205.909 353 188 335.091 188 313V212Z" fill="url(#lg)" fill-opacity="0.15"/>
+  <text x="256" y="465" text-anchor="middle" fill="url(#lg)" font-size="90" font-family="'Amiri', 'Cairo', serif" font-weight="700" direction="rtl">1HFB</text>
+</svg>

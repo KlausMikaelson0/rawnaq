@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="صفحة دفع آمنة في متجر رونق تدعم البطاقات البنكية وApple Pay ومدى."
+    />
+    <title>الدفع الآمن | رونق</title>
+    <link rel="icon" href="assets/brand/logo-icon.svg" type="image/svg+xml" />
+    <script src="assets/js/language-init.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script src="assets/js/config.js" defer></script>
+    <script src="assets/js/i18n.js" defer></script>
+    <script src="assets/js/api.js" defer></script>
+    <script src="assets/js/cart-store.js" defer></script>
+    <script src="assets/js/site.js" defer></script>
+    <script src="assets/js/checkout.js" defer></script>
+  </head>
+  <body
+    data-page="checkout"
+    data-title-template="الدفع الآمن | {store}"
+    data-description-template="صفحة دفع آمنة في متجر {store} تدعم البطاقات البنكية وApple Pay ومدى."
+  >
+    <div id="site-header"></div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="section-title">الدفع الآمن</h1>
+          <p class="section-subtitle">
+            تم تجهيز واجهة الدفع لتعزيز الثقة وتحسين التحويل، مع دعم البطاقات البنكية وApple Pay
+            ومدى بما يتوافق مع متطلبات السوق السعودي والخليجي.
+          </p>
+          <p id="secureInfo" class="muted"></p>
+          <div id="paymentBadges" class="secure-strip"></div>
+
+          <div class="checkout-layout">
+            <section class="payment-card">
+              <h2>اختر طريقة الدفع</h2>
+              <div id="paymentMethods" class="payment-methods"></div>
+
+              <form id="checkoutForm" class="form-grid">
+                <label>
+                  الاسم الكامل
+                  <input class="input" type="text" name="fullName" required />
+                </label>
+                <label>
+                  البريد الإلكتروني
+                  <input class="input" type="email" name="email" required />
+                </label>
+                <label>
+                  رقم الجوال
+                  <input class="input" type="tel" name="phone" required />
+                </label>
+                <label>
+                  المدينة
+                  <input class="input" type="text" name="city" />
+                </label>
+                <label>
+                  العنوان
+                  <input class="input" type="text" name="address" />
+                </label>
+                <label>
+                  ملاحظات الطلب
+                  <textarea name="notes" rows="3"></textarea>
+                </label>
+
+                <div id="cardFields" class="form-grid">
+                  <label>
+                    رقم البطاقة
+                    <input
+                      class="input"
+                      type="text"
+                      name="cardNumber"
+                      inputmode="numeric"
+                      autocomplete="cc-number"
+                      required
+                    />
+                  </label>
+                  <div class="dual-inputs">
+                    <label>
+                      تاريخ الانتهاء (MM/YY)
+                      <input
+                        class="input"
+                        type="text"
+                        name="cardExpiry"
+                        autocomplete="cc-exp"
+                        required
+                      />
+                    </label>
+                    <label>
+                      CVV
+                      <input
+                        class="input"
+                        type="text"
+                        name="cardCvv"
+                        inputmode="numeric"
+                        autocomplete="cc-csc"
+                        required
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <button id="checkoutSubmit" class="btn btn-gold" type="submit">
+                  إتمام الدفع الآن
+                </button>
+                <p id="checkoutStatus" class="form-status"></p>
+              </form>
+            </section>
+
+            <aside class="order-summary" id="orderSummary">
+              <h2>ملخص الطلب</h2>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore Rawnaq’s premium perfume catalog with 100 products, clear categories, and strategic pricing."
+    />
+    <title>Products | Rawnaq</title>
+    <link rel="icon" href="../assets/brand/logo-icon.svg" type="image/svg+xml" />
+    <script src="../assets/js/language-init.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <script src="../assets/js/config.js" defer></script>
+    <script src="../assets/js/i18n.js" defer></script>
+    <script src="../assets/js/api.js" defer></script>
+    <script src="../assets/js/cart-store.js" defer></script>
+    <script src="../assets/js/site.js" defer></script>
+    <script src="../assets/js/products-page.js" defer></script>
+  </head>
+  <body
+    data-page="products"
+    data-title-template="Products | {store}"
+    data-description-template="Explore {store}'s premium perfume catalog with 100 products, clear categories, and strategic pricing."
+  >
+    <div id="site-header"></div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="section-title">
+            <span class="gold" data-store-name>Rawnaq</span> premium collection
+          </h1>
+          <p class="section-subtitle">
+            Every listing is prepared for direct commercial use: strong naming, long-form
+            persuasive descriptions, and dual pricing to support campaigns and seasonal offers.
+          </p>
+
+          <div class="toolbar">
+            <input
+              class="input"
+              id="searchProducts"
+              type="search"
+              placeholder="Search by name, description, or SKU"
+              aria-label="Search products"
+            />
+            <select class="select" id="sortProducts" aria-label="Sort products">
+              <option value="featured">Default sorting</option>
+              <option value="price-low">Lowest price</option>
+              <option value="price-high">Highest price</option>
+              <option value="discount">Highest discount</option>
+            </select>
+          </div>
+
+          <div id="categoryFilters" class="chips section-sm"></div>
+          <p class="results-line">Results: <strong id="resultsCount">0 products</strong></p>
+          <div id="productsGrid" class="cards-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

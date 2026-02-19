@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="تواصل مع متجر رونق للاستفسار عن الطلبات أو التعاون التجاري."
+    />
+    <title>تواصل معنا | رونق</title>
+    <link rel="icon" href="assets/brand/logo-icon.svg" type="image/svg+xml" />
+    <script src="assets/js/language-init.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <script src="assets/js/config.js" defer></script>
+    <script src="assets/js/i18n.js" defer></script>
+    <script src="assets/js/api.js" defer></script>
+    <script src="assets/js/cart-store.js" defer></script>
+    <script src="assets/js/site.js" defer></script>
+  </head>
+  <body
+    data-page="contact"
+    data-title-template="تواصل معنا | {store}"
+    data-description-template="تواصل مع متجر {store} للاستفسار عن الطلبات أو التعاون التجاري."
+  >
+    <div id="site-header"></div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="section-title">تواصل معنا</h1>
+          <p class="section-subtitle">
+            فريق <span data-store-name>رونق</span> جاهز لخدمتك في أي وقت، سواء للاستفسارات
+            الشرائية أو الدعم بعد البيع.
+          </p>
+
+          <div class="contact-grid">
+            <aside class="contact-info">
+              <article class="contact-info-item">
+                <strong>البريد الإلكتروني</strong>
+                <p data-store-email>sales@rawnaq-store.com</p>
+              </article>
+              <article class="contact-info-item">
+                <strong>الهاتف</strong>
+                <p data-store-phone>+966 55 123 4567</p>
+              </article>
+              <article class="contact-info-item">
+                <strong>المدينة</strong>
+                <p data-store-location>الرياض - المملكة العربية السعودية</p>
+              </article>
+              <article class="contact-info-item">
+                <strong>واتساب مباشر</strong>
+                <p>
+                  <a class="btn btn-outline" data-store-whatsapp href="https://wa.me/966551234567"
+                    >ابدأ المحادثة</a
+                  >
+                </p>
+              </article>
+            </aside>
+
+            <section class="contact-card">
+              <h2>أرسل رسالة</h2>
+              <form id="contactForm" class="form-grid">
+                <label>
+                  الاسم الكامل
+                  <input class="input" type="text" name="name" required />
+                </label>
+                <label>
+                  رقم الجوال
+                  <input class="input" type="tel" name="phone" required />
+                </label>
+                <label>
+                  البريد الإلكتروني
+                  <input class="input" type="email" name="email" required />
+                </label>
+                <label>
+                  الرسالة
+                  <textarea name="message" rows="5" required></textarea>
+                </label>
+                <button class="btn btn-gold" type="submit">إرسال الرسالة</button>
+                <p id="formStatus" class="form-status"></p>
+              </form>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>

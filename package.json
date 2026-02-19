@@ -1,0 +1,32 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "متجر إلكتروني فاخر مكتمل وجاهز للبيع كمنتج نهائي، قابل للنقل الكامل إلى مالك جديد بدون اعتماد تقني على المطور بعد التسليم.",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node scripts/init-db.js && node server/index.js",
+    "dev": "node scripts/init-db.js && node --watch server/index.js",
+    "db:init": "node scripts/init-db.js",
+    "db:reset": "node scripts/init-db.js --reset",
+    "admin:reset": "node scripts/reset-admin.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KlausMikaelson0/rawnaq.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KlausMikaelson0/rawnaq/issues"
+  },
+  "homepage": "https://github.com/KlausMikaelson0/rawnaq#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.6.2",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "nanoid": "^5.1.6"
+  }
+}

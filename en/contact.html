@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Contact Rawnaq for order support, partnerships, or general inquiries."
+    />
+    <title>Contact Us | Rawnaq</title>
+    <link rel="icon" href="../assets/brand/logo-icon.svg" type="image/svg+xml" />
+    <script src="../assets/js/language-init.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <script src="../assets/js/config.js" defer></script>
+    <script src="../assets/js/i18n.js" defer></script>
+    <script src="../assets/js/api.js" defer></script>
+    <script src="../assets/js/cart-store.js" defer></script>
+    <script src="../assets/js/site.js" defer></script>
+  </head>
+  <body
+    data-page="contact"
+    data-title-template="Contact Us | {store}"
+    data-description-template="Contact {store} for order support, partnerships, or general inquiries."
+  >
+    <div id="site-header"></div>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <h1 class="section-title">Contact Us</h1>
+          <p class="section-subtitle">
+            The <span data-store-name>Rawnaq</span> team is ready to support you with pre-sale
+            questions, order assistance, and post-purchase follow-up.
+          </p>
+
+          <div class="contact-grid">
+            <aside class="contact-info">
+              <article class="contact-info-item">
+                <strong>Email</strong>
+                <p data-store-email>sales@rawnaq-store.com</p>
+              </article>
+              <article class="contact-info-item">
+                <strong>Phone</strong>
+                <p data-store-phone>+966 55 123 4567</p>
+              </article>
+              <article class="contact-info-item">
+                <strong>Location</strong>
+                <p data-store-location>Riyadh - Saudi Arabia</p>
+              </article>
+              <article class="contact-info-item">
+                <strong>WhatsApp</strong>
+                <p>
+                  <a class="btn btn-outline" data-store-whatsapp href="https://wa.me/966551234567"
+                    >Start chat</a
+                  >
+                </p>
+              </article>
+            </aside>
+
+            <section class="contact-card">
+              <h2>Send a Message</h2>
+              <form id="contactForm" class="form-grid">
+                <label>
+                  Full Name
+                  <input class="input" type="text" name="name" required />
+                </label>
+                <label>
+                  Phone Number
+                  <input class="input" type="tel" name="phone" required />
+                </label>
+                <label>
+                  Email Address
+                  <input class="input" type="email" name="email" required />
+                </label>
+                <label>
+                  Message
+                  <textarea name="message" rows="5" required></textarea>
+                </label>
+                <button class="btn btn-gold" type="submit">Send Message</button>
+                <p id="formStatus" class="form-status"></p>
+              </form>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+  </body>
+</html>
